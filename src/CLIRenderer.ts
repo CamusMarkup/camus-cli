@@ -178,7 +178,7 @@ export class CLIRenderer extends camus.Renderer.HTMLRenderer {
                     v.forEach((j) => { this._text(j as string); this._pp.line(); });
                 });
             } else {
-                this._pp.string(cp.stdout.toString('utf-8'));
+                this._pp.string(cp.stdout.toString('utf-8').trim().replace(/\s*(<!--[\s\S]*-->)\s*<pre>([\s\S]*)<\/pre>/m, '$1$2'));
             }
             this._pp.removeIndent().indent().string(`</pre>`).line();
 
