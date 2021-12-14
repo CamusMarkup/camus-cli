@@ -30,6 +30,9 @@ export type CamusCLIConfig = {
     sourceHighlight: {
         enabled: boolean,
         command: string[],
+        langAlias?: {
+            [key: string]: string
+        }
     }
 }
 
@@ -85,6 +88,10 @@ export class CLIRenderer extends camus.Renderer.HTMLRenderer {
 
     processFile(x: string) {
         let realX = path.resolve(x);
+        if (!fs.existsSync(realX)) {
+            console.error(`path ${realX} does not exists. skipping.`);
+            return;
+        }
         if (this._doneStk.includes(realX)) { return; }
         this._currentPath = path.dirname(realX);
         let resultPath = (
@@ -154,10 +161,14 @@ export class CLIRenderer extends camus.Renderer.HTMLRenderer {
 
     protected _block(n: camus.AST.BlockNode) {
         if (n.type === 'code' && this.cliOption.sourceHighlight.enabled) {
+            this._pp.indent().string(`<pre class="code code-${n.arg}">`).line().addIndent();
+            
+            let langAlias = this.cliOption.sourceHighlight.langAlias;
+            let lang = langAlias && langAlias[n.arg.trim()]? langAlias[n.arg.trim()] : n.arg.trim();
             let command = this.cliOption.sourceHighlight.command;
             let cp = child_process.spawnSync(
                 command[0],
-                command.slice(1).map((v) => v.replace('%lang%', n.arg.trim())),
+                command.slice(1).map((v) => v.replace('%lang%', lang)),
                 {
                     input: n.text.join('\n')
                 }
@@ -169,6 +180,8 @@ export class CLIRenderer extends camus.Renderer.HTMLRenderer {
             } else {
                 this._pp.string(cp.stdout.toString('utf-8'));
             }
+            this._pp.removeIndent().indent().string(`</pre>`).line();
+
         } else {
             super._block(n);
         }
@@ -182,6 +195,7 @@ export class CLIRenderer extends camus.Renderer.HTMLRenderer {
     }
 
     protected _ref(x: camus.AST.RefNode) {
+        if (x.path.startsWith('#')) { super._ref(x); return; }
         let currentDir = this._currentPath;
         let realRefPath = path.join(currentDir, x.path);
         if (!this._doneStk.includes(realRefPath)) {
@@ -193,7 +207,9 @@ export class CLIRenderer extends camus.Renderer.HTMLRenderer {
             : realRefPath
         )+'.html';
         let hrefPath = path.relative(this._currentPath, realRefResultPath);
-        this._pp.string(`<a href="${hrefPath}">${x.text}</a>`);
+        this._pp.string(`<a href="${hrefPath}">`);
+        this._renderLine(x.text);
+        this._pp.string(`</a>`);
     }
 }
 
