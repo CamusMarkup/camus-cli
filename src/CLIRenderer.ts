@@ -155,8 +155,28 @@ export class CLIRenderer extends camus.Renderer.HTMLRenderer {
     }
 
     private _flatten(n: camus.AST.CamusLine) {
+        function helper(x: camus.AST.CamusLine): string {
+            return x.map((v) => {
+                if (typeof v === 'string') { return v; }
+                else {
+                    switch (v._nodeType) {
+                        case camus.AST.CamusNodeType.Link: { return helper(v.text); }
+                        case camus.AST.CamusNodeType.Ref: { return helper(v.text); }
+                        case camus.AST.CamusNodeType.FootnoteRef:
+                        case camus.AST.CamusNodeType.InlineIgnore:
+                        case camus.AST.CamusNodeType.Tag:
+                        case camus.AST.CamusNodeType.Image: {
+                            return '';
+                        }
+                        case camus.AST.CamusNodeType.InlineStyle: {
+                            return helper(v.text);
+                        }
+                    }
+                }
+            }).join('');
+        }
         // TODO: fix this with proper flatten procedure later.
-        return n.filter((v) => typeof v === 'string').join('');
+        return helper(n);
     }
 
     protected _block(n: camus.AST.BlockNode) {
