@@ -12,7 +12,7 @@ if (!command) {
 
 switch (command) {
     case 'ver': {
-        process.stdout.write('0.1.0');
+        process.stdout.write('0.1.5');
         break;
     }
     case 'init': {
@@ -45,13 +45,17 @@ switch (command) {
         break;
     }
     case 'run': {
+        let oldCwd = process.cwd();
         let configFileData = fs.readFileSync(process.argv[3], {encoding: 'utf-8'});
+        let newCwd = path.dirname(path.resolve(process.argv[3]));
+        process.chdir(newCwd);
         let config: CamusCLIConfig = JSON.parse(configFileData);
         let renderer = new CLIRenderer(config);
         renderer.processFile(path.join(config.basePath||'', config.main));
         if (config.rss.enabled) {
             renderer.rss();
         }
+        process.chdir(oldCwd);
         break;
     }
 }
