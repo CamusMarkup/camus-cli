@@ -103,7 +103,8 @@ export class CLIRenderer extends camus.Renderer.HTMLRenderer {
         this._currentTitle = '';
         // NOTE: this.render will change this._currentTitle and this._queueStk
         // thru methods `_heading` and `_ref`.
-        let renderData = this.render(camus.Parser.parse(fileData));
+        let parsedData = camus.Parser.parse(fileData);
+        let renderData = this.render(parsedData);
         fs.writeFileSync(resultPath, this._preamble.replace('%title%', this._currentTitle));
         fs.appendFileSync(resultPath, renderData);
         fs.appendFileSync(resultPath, this._postamble.replace('%title%', this._currentTitle));

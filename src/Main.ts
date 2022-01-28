@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import { parse } from '@bctnry/camus-core/out/Parser';
+import { HTMLRenderer } from '@bctnry/camus-core/out/Renderer';
 import * as fs from 'fs';
 import * as path from 'path';
 import { CamusCLIConfig, CLIRenderer } from './CLIRenderer';
@@ -56,6 +58,17 @@ switch (command) {
             renderer.rss();
         }
         process.chdir(oldCwd);
+        break;
+    }
+    case 'singleParse': {
+        let renderer = new HTMLRenderer();
+        console.log(JSON.stringify(parse(fs.readFileSync(process.argv[3], {encoding: 'utf-8'})), undefined, '    '));
+        break;
+    }
+
+    case 'singleRender': {
+        let renderer = new HTMLRenderer();
+        console.log(renderer.render(parse(fs.readFileSync(process.argv[3], {encoding: 'utf-8'}))));
         break;
     }
 }
