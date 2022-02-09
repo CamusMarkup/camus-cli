@@ -86,7 +86,7 @@ export class CLIRenderer extends camus.Renderer.HTMLRenderer {
         }
     }
 
-    processFile(x: string) {
+    processFile(x: string, isFinal: boolean = false) {
         let realX = path.resolve(x);
         if (!fs.existsSync(realX)) {
             console.error(`path ${realX} does not exists. skipping.`);
@@ -105,9 +105,11 @@ export class CLIRenderer extends camus.Renderer.HTMLRenderer {
         // thru methods `_heading` and `_ref`.
         let parsedData = camus.Parser.parse(fileData);
         let renderData = this.render(parsedData);
-        fs.writeFileSync(resultPath, this._preamble.replace('%title%', this._currentTitle));
-        fs.appendFileSync(resultPath, renderData);
-        fs.appendFileSync(resultPath, this._postamble.replace('%title%', this._currentTitle));
+        if (!isFinal) {
+            fs.writeFileSync(resultPath, this._preamble.replace('%title%', this._currentTitle));
+            fs.appendFileSync(resultPath, renderData);
+            fs.appendFileSync(resultPath, this._postamble.replace('%title%', this._currentTitle));
+        }
         let xStat = fs.statSync(realX);
         let normalizedItemBaseUrl = this.cliOption.rss.itemBaseUrl.endsWith('/')? this.cliOption.rss.itemBaseUrl : this.cliOption.rss.itemBaseUrl + '/';
         let rel = path.relative(path.resolve(this._basePath), x);
@@ -219,6 +221,12 @@ export class CLIRenderer extends camus.Renderer.HTMLRenderer {
         if (x.path.startsWith('#')) { super._ref(x); return; }
         let currentDir = this._currentPath;
         let realRefPath = path.join(currentDir, x.path);
+        if (x.path.startsWith('$final:')) {
+            realRefPath = path.join(currentDir, x.path.substring('$final:'.length));
+            this.processFile(realRefPath, true);
+            super._ref(x);
+            return;
+        }
         if (!this._doneStk.includes(realRefPath)) {
             this._queueStk.push(realRefPath);
         }
