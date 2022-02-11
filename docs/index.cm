@@ -1,0 +1,45 @@
+= `@bctnry/camus-cli`
+
+GitHub repository: {link:https://github.com/CamusMarkup/camus-cli}
+
+`@bctnry/camus-cli` is the official command line utility for {link(Camus):https://camusmarkup.github.io}. It includes a basic static site generator.
+
+== Install & Usage
+
+Install with:
+
+#{code sh
+    npm install --global @bctnry/camus-cli
+#}
+
+Currently the following commands are supported:
+
++ `camus-cli singleRender [fileName]`: process single file into HTML.
++ `camus-cli init`: generate brand new `camus-cli.json` file. This file controls the static site generation.
++ `camus-cli run [camusCliJson]`: generate the whole site.
+
+== Static site generation
+
+`@bctnry/camus-cli` make uses of Camus's `{ref}` link. All `.cm` files reachable from the starting point (specified by the `basePath` and the `main` field in `camus-cli.json`) will be processed.
+
+=== The structure of `camus-cli.json`
+
++ `basePath`: string. The base path of all relative path in `camus-cli.json`. For example, if:
+  + the `camus-cli.json` file is in directory `\/home\/usr0/myblog`
+  + the value of this field is `blog`
+  + the value of the field `main` is 'index.cm'
+
+  `camus-cli` will start the generation from `\/home\/usr0\/myblog\/blog\/index.cm`.
++ `main`: the starting point.
++ `preamble`: the preamble.
+  + `enabled`: boolean. Whether `camus-cli` should add preamble to generated output.
+  + `path`: string. The relative (to `basePath`) path of the preamble file.
++ `postamble`: the postamble.
+  + `enabled`: boolean. Whether `camus-cli` should add postamble to generated output.
+  + `path`: string. The relative (to `basePath`) path of the postamble file.
++ `rss`:
+  + `enabled`: boolean. Whether `camus-cli` should generate an RSS feed.
++ `sourceHighlight`: GNU source-highlight related configurations.
+  + `enabled`: boolean. Whether source-highlight is enabled.
+  + `command`: array of strings. The command used to invoke source-highlight. One can use the variable `%lang%` to refer to the language part of `#{code` block. For example, if the command field is set to `["source-highlight", "-s", "%lang"]`, then `camus-cli` will execute the command `source-highlight -s python` when converting a `#{code python` block.
+

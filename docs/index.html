@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@bctnry/camus-cli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="template.css" />
+</head>
+<body>
+    <div id="main"><h1><code>@bctnry/camus-cli</code></h1>
+<p>GitHub repository: <a href="https://github.com/CamusMarkup/camus-cli">https://github.com/CamusMarkup/camus-cli</a></p>
+<p><code>@bctnry/camus-cli</code> is the official command line utility for <a href="https://camusmarkup.github.io">Camus</a>. It includes a basic static site generator.</p>
+<h2>Install &amp; Usage</h2>
+<p>Install with:</p>
+<pre class="code code-sh">npm install --global @bctnry/camus-cli
+</pre>
+<p>Currently the following commands are supported:</p>
+
+<ul>
+    <li><code>camus-cli singleRender [fileName]</code>: process single file into HTML.</li>
+    <li><code>camus-cli init</code>: generate brand new <code>camus-cli.json</code> file. This file controls the static site generation.</li>
+    <li><code>camus-cli run [camusCliJson]</code>: generate the whole site.</li>
+</ul>
+<h2>Static site generation</h2>
+<p><code>@bctnry/camus-cli</code> make uses of Camus's <code>{ref}</code> link. All <code>.cm</code> files reachable from the starting point (specified by the <code>basePath</code> and the <code>main</code> field in <code>camus-cli.json</code>) will be processed.</p>
+<h3>The structure of <code>camus-cli.json</code></h3>
+
+<ul>
+    <li><code>basePath</code>: string. The base path of all relative path in <code>camus-cli.json</code>. For example, if:
+    <ul>
+        <li>the <code>camus-cli.json</code> file is in directory <code>/home/usr0/myblog</code></li>
+        <li>the value of this field is <code>blog</code></li>
+        <li>the value of the field <code>main</code> is 'index.cm'</li>
+    </ul>
+<p><code>camus-cli</code> will start the generation from <code>/home/usr0/myblog/blog/index.cm</code>.</p>
+</li>
+    <li><code>main</code>: the starting point.</li>
+    <li><code>preamble</code>: the preamble.
+    <ul>
+        <li><code>enabled</code>: boolean. Whether <code>camus-cli</code> should add preamble to generated output.</li>
+        <li><code>path</code>: string. The relative (to <code>basePath</code>) path of the preamble file.</li>
+    </ul>
+</li>
+    <li><code>postamble</code>: the postamble.
+    <ul>
+        <li><code>enabled</code>: boolean. Whether <code>camus-cli</code> should add postamble to generated output.</li>
+        <li><code>path</code>: string. The relative (to <code>basePath</code>) path of the postamble file.</li>
+    </ul>
+</li>
+    <li><code>rss</code>:
+    <ul>
+        <li><code>enabled</code>: boolean. Whether <code>camus-cli</code> should generate an RSS feed.</li>
+    </ul>
+</li>
+    <li><code>sourceHighlight</code>: GNU source-highlight related configurations.
+    <ul>
+        <li><code>enabled</code>: boolean. Whether source-highlight is enabled.</li>
+        <li><code>command</code>: array of strings. The command used to invoke source-highlight. One can use the variable <code>%lang%</code> to refer to the language part of <code>#{code</code> block. For example, if the command field is set to <code>["source-highlight", "-s", "%lang"]</code>, then <code>camus-cli</code> will execute the command <code>source-highlight -s python</code> when converting a <code>#{code python</code> block.</li>
+    </ul>
+</li>
+</ul>

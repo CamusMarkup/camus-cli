@@ -1,0 +1,29 @@
+{
+    "basePath": "docs",
+    "main": "index.cm",
+    "preamble": {
+        "enabled": true,
+        "path": "_preamble"
+    },
+    "postamble": {
+        "enabled": false,
+        "path": "_postamble"
+    },
+    "rss": {
+        "enabled": false,
+        "targetFilePath": "feed.rss",
+        "title": "[input title here]",
+        "description": "[input description here]",
+        "copyright": "[input copyright info here]",
+        "channelUrl": "[input channel url here]",
+        "itemBaseUrl": "[input item base url here]"
+    },
+    "sourceHighlight": {
+        "enabled": false,
+        "command": [
+            "source-highlight",
+            "-s",
+            "%lang%"
+        ]
+    }
+}

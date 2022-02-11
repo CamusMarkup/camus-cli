@@ -1,0 +1,89 @@
+/*
+@media print {
+    #main { width: 85%; margin: 0; }
+}
+@media screen and (min-width: 960px) {
+    #main {
+        width: auto !important;
+        margin: 4rem !important;
+    }
+}
+@media screen and (max-width: 960px) {
+    #main {
+        width: auto !important;
+        margin: 3rem !important;
+    }
+}
+@media screen and (max-width: 800px) {
+    #main {
+        width: 90% !important;
+        margin: 2rem !important;
+    }
+}*/
+
+#main {
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: white;
+    width: 60%;
+}
+
+@media print {
+    #main { width: auto !important; margin: 1rem; padding: 1rem; }
+}
+@media screen and (max-width: 1200px) {
+    #main { width: 70%; }
+}
+@media screen and (max-width: 1100px) {
+    #main { width: 80%; }
+}
+@media screen and (max-width: 1000px) {
+    #main { width: 85%; }
+}
+@media screen and (max-width: 900px) {
+    #main { width: 90%; }
+}
+@media screen and (max-width: 800px) {
+    #main { width: 95%; }
+}
+@media screen and (max-width: 700px) {
+    #main { width: auto !important; }
+}
+.centered {
+    text-align: center;
+}
+body {
+    color: black;
+    background-color: white;
+    font-family: 'Source Han Serif', 'Times New Roman', Times, serif;
+    padding: 0px;
+    margin: 0px;
+}
+#main {
+    
+}
+a {
+    color: black;
+}
+.footer {
+    font-size: 80%;
+    
+}
+.cite-area {
+    font-size: 80%;
+}
+.right-align {
+    text-align: right;
+}
+code {
+    font-family: monospace;
+}
+.code {
+    padding-left: 150px;
+}
+.sub-comment {
+    color: #3f3f3f;
+}
+.sub-comment a {
+    color: #3f3f3f;
+}
