@@ -56,7 +56,7 @@ function formatDate(x: Date) {
         'Sat'
     ][x.getDay()];
     let monthString = [
-        '', 'Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        'Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ][x.getMonth()];
     
     return `${dayString}, ${alignTimeNumber(x.getDate())} ${monthString} ${x.getFullYear()} ${alignTimeNumber(x.getHours())}:${alignTimeNumber(x.getMinutes())}:${alignTimeNumber(x.getSeconds())} ${sign?'+':'-'}${alignTimeNumber(offsetH)}${alignTimeNumber(offsetM)}`;
@@ -117,7 +117,7 @@ export class CLIRenderer extends camus.Renderer.HTMLRenderer {
             this._rssStk.push({
                 title: this._currentTitle||'',
                 url: `${normalizedItemBaseUrl}${path.relative(this._basePath, resultPath)}`,
-                date: xStat.atime
+                date: xStat.mtime
             });
         }
         this._doneStk.push(realX);
