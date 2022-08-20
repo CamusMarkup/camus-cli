@@ -43,3 +43,7 @@ Currently the following commands are supported:
   + `enabled`: boolean. Whether source-highlight is enabled.
   + `command`: array of strings. The command used to invoke source-highlight. One can use the variable `%lang%` to refer to the language part of `#{code` block. For example, if the command field is set to `["source-highlight", "-s", "%lang"]`, then `camus-cli` will execute the command `source-highlight -s python` when converting a `#{code python` block.
 
+
+=== Using preamble and postamble files
+
++ `%title%` in preamble/postamble files will be replaced by the first Level 1 header in the `.cm` file.

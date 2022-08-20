@@ -56,7 +56,7 @@ function formatDate(x: Date) {
         'Sat'
     ][x.getDay()];
     let monthString = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        '', 'Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ][x.getMonth()];
     
     return `${dayString}, ${alignTimeNumber(x.getDate())} ${monthString} ${x.getFullYear()} ${alignTimeNumber(x.getHours())}:${alignTimeNumber(x.getMinutes())}:${alignTimeNumber(x.getSeconds())} ${sign?'+':'-'}${alignTimeNumber(offsetH)}${alignTimeNumber(offsetM)}`;
@@ -187,7 +187,7 @@ export class CLIRenderer extends camus.Renderer.HTMLRenderer {
             this._pp.indent().string(`<pre class="code code-${n.arg}">`).line().addIndent();
             
             let langAlias = this.cliOption.sourceHighlight.langAlias;
-            let lang = langAlias && langAlias[n.arg.trim()]? langAlias[n.arg.trim()] : n.arg.trim();
+            let lang = langAlias && langAlias[(n.arg||'').trim()]? langAlias[(n.arg||'').trim()] : (n.arg||'').trim();
             let command = this.cliOption.sourceHighlight.command;
             let cp = child_process.spawnSync(
                 command[0],
@@ -204,7 +204,6 @@ export class CLIRenderer extends camus.Renderer.HTMLRenderer {
                 this._pp.string(cp.stdout.toString('utf-8').trim().replace(/\s*(<!--[\s\S]*-->)\s*<pre>([\s\S]*)<\/pre>/m, '$1$2'));
             }
             this._pp.removeIndent().indent().string(`</pre>`).line();
-
         } else {
             super._block(n);
         }
@@ -239,6 +238,10 @@ export class CLIRenderer extends camus.Renderer.HTMLRenderer {
         this._pp.string(`<a href="${hrefPath}">`);
         this._renderLine(x.text);
         this._pp.string(`</a>`);
+    }
+
+    protected _image(n: camus.AST.ImageNode) {
+        this._pp.string(`<div style="text-align:center"><img src="${n.url}" alt="${n.alt}" /><p class="image-alt">${n.alt}</p></div>`);
     }
 }
 

@@ -14,7 +14,7 @@ if (!command) {
 
 switch (command) {
     case 'ver': {
-        process.stdout.write('0.1.5');
+        process.stdout.write('0.2.1');
         break;
     }
     case 'init': {
